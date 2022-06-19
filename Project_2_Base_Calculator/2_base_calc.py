@@ -29,7 +29,7 @@ def converter(entry_obj, label_result):
     """ Converts the number into all bases. """
 
     text = entry_obj.get()
-    digits = entry_obj[2:]
+    digits = text[2:]
 
     if '0b' in text:
         decimal = int(digits, 2)
