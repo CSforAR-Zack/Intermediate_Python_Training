@@ -19,31 +19,7 @@ def main():
 
     bars = Bars(wn, x_pad, y_pad, speed)
     bars.create_bars(number_of_bars, max_height, width, color)
-
-    # bars.insertion_sort()
-    # bars.clear_bars()
-    # sleep(1)
-    # bars.create_bars(number_of_bars, max_height, width)
-    # bars.selection_sort()
-    # bars.bubble_sort()
-
-    # bars.selection_sort()
-    # sleep(1)
-    # bars.clear_bars()
-    # bars.create_bars(number_of_bars, max_height, width, color)
-    # bars.selection_sort_color()
-
-    # bars.insertion_sort()
-    # sleep(1)
-    # bars.clear_bars()
-    # bars.create_bars(number_of_bars, max_height, width, color)
-    # bars.insertion_sort_color()
-    bars.bubble_sort_color()
-    bars.reset_bars()
-    sleep(.5)
-    bars.selection_sort_color()
-    bars.reset_bars()
-    sleep(.5)
+    
     bars.insertion_sort_color()
 
     wn.mainloop()
