@@ -7,7 +7,7 @@ from time import sleep
 def main():
     # This are the variables you can change
     number_of_bars = 40
-    width = 4
+    width = 10
     max_height = 500
     x_pad = 1
     y_pad = 5
@@ -24,10 +24,31 @@ def main():
     bars.create_bars(number_of_bars, max_height, width, color)
     
     # Sort bars
+    # bars.insertion_sort()
+    # bars.selection_sort()
+    # bars.bubble_sort()
     # bars.insertion_sort_color()
+    # bars.selection_sort_color()
     bars.bubble_sort_color()
 
     wn.mainloop()
+
+class Bar:
+    '''
+    A class to represent a bar.
+    '''
+    def __init__(self, height, width, color):
+        self.height = height
+        self.frame = tk.Frame(width=width, height=self.height, bg=color)
+
+    def color(self, color):
+        self.frame.config(bg=color)
+    
+    def __lt__(self, __value: object) -> bool:
+        return self.height < __value.height
+    
+    def __gt__(self, __value: object) -> bool:
+        return self.height > __value.height
 
 class Bars:
     '''
@@ -37,127 +58,102 @@ class Bars:
 
     def __init__(self, wn, x_pad, y_pad, speed):
         self.bars = list()
-        self.heights = list()
-        self.original_heights = list() # Omit unless resetting bars
         self.wn = wn
         self.x_pad = x_pad
         self.y_pad = y_pad
         self.speed = speed
 
     def update_bars(self):
-        # Update the bars by changing their height
-        # and updating the window and pausing.
-        # This allows the user to see the changes.
-        for i, bar in enumerate(self.bars):
-            bar.config(height=self.heights[i])
-            bar.pack(anchor="s", side="left", padx=self.x_pad, pady=self.y_pad)
+        for bar in self.bars:
+            bar.frame.pack_forget()
+        for bar in self.bars:
+            bar.frame.pack(anchor="s", side="left", padx=self.x_pad, pady=self.y_pad)
         self.wn.update()
         sleep(self.speed)
 
     def create_bars(self, num_of_bars, max_height, width, color):
-        # Create the bars and add them to the window.
-        # Also add their heights to the heights list.
-        # Keeping up with the heights is important
-        # because that is how we sort the bars.
-        # It is easier to keep up with the heights in a seperate list and sort them
-        # than it is to keep up with the bars and move them while they get sorted.
         for _ in range(num_of_bars):
             height = randint(2, max_height)
-            self.heights.append(height)
-            self.original_heights.append(height) # Omit unless resetting bars
-
-            bar = tk.Frame(width=width, height=height, bg=color)
-            bar.pack(anchor="s", side = "left", padx=self.x_pad, pady=self.y_pad)
+            bar = Bar(height, width, color)
+            bar.frame.pack(anchor="s", side = "left", padx=self.x_pad, pady=self.y_pad)
             self.bars.append(bar)
 
     def insertion_sort(self):
-        for j in range(1, len(self.heights)):
+        for j in range(1, len(self.bars)):
             k = j - 1
-            while k >= 0 and self.heights[k] > self.heights[k + 1]:
-                self.heights[k], self.heights[k + 1] = self.heights[k + 1], self.heights[k]
+            while k >= 0 and self.bars[k] > self.bars[k + 1]:
+                self.bars[k], self.bars[k + 1] = self.bars[k + 1], self.bars[k]
                 k -= 1
                 self.update_bars()
 
     def selection_sort(self):
-        for i in range(len(self.heights) - 1):
+        for i in range(len(self.bars) - 1):
             best = i
-            for j in range(i + 1, len(self.heights)):
-                if self.heights[j] < self.heights[best]:
+            for j in range(i + 1, len(self.bars)):
+                if self.bars[j] < self.bars[best]:
                     best = j
                 self.update_bars()
-            self.heights[i], self.heights[best] = self.heights[best], self.heights[i]
+            self.bars[i], self.bars[best] = self.bars[best], self.bars[i]
 
     def bubble_sort(self):
-        for i in range(len(self.heights)):
-            for j in range(len(self.heights) - 1 - i):
-                if self.heights[j] > self.heights[j + 1]:
-                    self.heights[j], self.heights[j + 1] = self.heights[j + 1], self.heights[j]
+        for i in range(len(self.bars)):
+            for j in range(len(self.bars) - 1 - i):
+                if self.bars[j] > self.bars[j + 1]:
+                    self.bars[j], self.bars[j + 1] = self.bars[j + 1], self.bars[j]
                 self.update_bars()
 
     # Others
-    # Clear bars
-    def clear_bars(self):
-        self.heights.clear()
-        for bar in self.bars:
-            bar.destroy()
-        self.bars.clear()
-
-    # Reset bars
-    # This is for when you want to sort the bars again
-    def reset_bars(self):
-        for bar in self.bars:
-            bar.config(bg='grey') ############
-        self.heights = self.original_heights.copy()
-        self.update_bars()
-    
+  
     # Colors
     def insertion_sort_color(self):
-        self.bars[0].config(bg='lime green') ############
-        for j in range(1, len(self.heights)):
+        self.bars[0].color('lime green') ############
+        for j in range(1, len(self.bars)):
             k = j - 1
-            self.bars[j].config(bg='yellow') ############
-            while k >= 0 and self.heights[k] > self.heights[k + 1]:
-                self.heights[k], self.heights[k + 1] = self.heights[k + 1], self.heights[k]
-                self.bars[k].config(bg='yellow') ############
-                self.bars[k + 1].config(bg='lime green') ############
+            self.bars[j].color('yellow') ############
+            while k >= 0 and self.bars[k] > self.bars[k + 1]:
+                self.bars[k], self.bars[k + 1] = self.bars[k + 1], self.bars[k]
+                self.bars[k].color('yellow') ############
+                self.bars[k + 1].color('lime green') ############
                 k -= 1
                 self.update_bars()
-            self.bars[k + 1].config(bg='lime green') ############
+            self.bars[k + 1].color('lime green') ############
 
     def bubble_sort_color(self):
-        for i in range(len(self.heights)):
-            for j in range(len(self.heights) - 1 - i):
-                self.bars[j].config(bg='grey') ############
-                self.bars[j + 1].config(bg='yellow') ############
-                if self.heights[j] > self.heights[j + 1]:
-                    self.heights[j], self.heights[j + 1] = self.heights[j + 1], self.heights[j]
+        for i in range(len(self.bars)):
+            for j in range(len(self.bars) - 1 - i):
+                if self.bars[j] > self.bars[j + 1]:
+                    self.bars[j], self.bars[j + 1] = self.bars[j + 1], self.bars[j]
+                self.bars[j].color('grey') ############
+                self.bars[j + 1].color('yellow') ############
                 self.update_bars()
-            self.bars[len(self.heights) - 1 - i].config(bg='lime green') ############
+            self.bars[len(self.bars) - 1 - i].color('lime green') ############
 
     def selection_sort_color(self):
-        for k in range(len(self.heights)):
+        for k in range(len(self.bars)):
             best = k
-            self.bars[-1].config(bg='grey') #########
-            self.bars[k].config(bg='cyan') ############
-            for q in range(k + 1, len(self.heights)):
+            self.bars[-1].color('grey') #########
+            self.bars[k].color('cyan') ############
+            for q in range(k + 1, len(self.bars)):
                 if q - 1 > k and q - 1 != best: ############
-                    self.bars[q - 1].config(bg='grey') ############
-                self.bars[q].config(bg='yellow') ############
-                if self.heights[q] < self.heights[best]:
+                    self.bars[q - 1].color('grey') ############
+                self.bars[q].color('yellow') ############
+                if self.bars[q] < self.bars[best]:
                     if best != k: ############
-                        self.bars[best].config(bg='grey') ############
+                        self.bars[best].color('grey') ############
                     best = q
                     if best != k: ############
-                        self.bars[q].config(bg='red') ############
+                        self.bars[q].color('red') ############
                 self.update_bars() ############
-            self.heights[k], self.heights[best] = self.heights[best], self.heights[k]
-            self.bars[k].config(bg='lime green') ############
+            self.bars[k], self.bars[best] = self.bars[best], self.bars[k]
+            self.bars[k].color('lime green') ############
             if best != k: ############
-                self.bars[best].config(bg='grey') ############
+                self.bars[best].color('grey') ############
         self.update_bars() ############
 
 if __name__ == '__main__':
     main()
+
+
 
 
 # Standards
@@ -166,32 +162,30 @@ if __name__ == '__main__':
 
 # CSPG.Y2.2.1 - Construct and evaluate compound expressions using multiple relational and logical operators
 # The insertion sort, selection sort, and bubble sort use multiple relational and logical operators
-# For example: while k >= 0 and self.heights[k] > self.heights[k + 1]: in the insertion sort
+# For example: while k >= 0 and self.bars[k] > self.bars[k + 1]: in the insertion sort
 
 # CSPG.Y2.2.4 - Analyze and utilize concepts of abstraction as modeling and abstraction as encapsulation
 # Displaying the bars is an example of abstraction as modeling
-# Creating a class to represent the bars is an example of abstraction as encapsulation
+# Creating classes to represent the bar and bars is an example of abstraction as encapsulation
 
 # CSPG.Y2.3.1 - Create programs to store, access, and manipulate level-appropriate data (e.g., structured data, objects)
-# The bars are stored in a list of Frame objects in the Bars class (structured data) 
-# The heights of the bars are stored in a list of integers in the Bars class (structured data)
+# The bars are stored in a list of Bar objects in the Bars class (structured data) 
 # The bars are accessed and manipulated in the Bars class (objects)
-# The heights of the bars are accessed and manipulated in the Bars class (objects)
 
 # CSPG.Y2.3.4 - Analyze, utilize, and visually represent level appropriate static and dynamic data
 # The bars are visually represented in the Bars class
-# The heights of the bars are visually represented in the Bars class
+# The heights of the bars are visually represented in the Bar class
 
 # CSPG.Y2.3.5 - Perform level-appropriate data analysis using computing tools
 # Sorting the heights is an example of data analysis using computing tools
 
 # CSPG.Y2.5.1 - Design and implement level-appropriate algorithms that use iteration, recursion, selection, and sequence
 # Iteration is used in the insertion sort, selection sort, and bubble sort
-# Example: for i in range(len(self.heights) - 1):
+# Example: for i in range(len(self.bars) - 1):
 # Selection is used when finding the best bar in the selection sort and when swapping the best bar with the current bar
-# Example: if self.heights[j] < self.heights[best]:
+# Example: if self.bars[j] < self.bars[best]:
 # Sequence is the order in which the program is executed (top to bottom) and the order in which the bars are sorted
-# Example: self.heights[j], self.heights[j + 1] = self.heights[j + 1], self.heights[j]
+# Example: self.bars[j], self.bars[j + 1] = self.bars[j + 1], self.bars[j]
 # Recursion is not used in this program
 
 # CSPG.Y2.5.3 - Evaluate the qualities of level-appropriate student created and non-student-created algorithms including classic search and sort algorithms
