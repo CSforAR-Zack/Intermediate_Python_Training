@@ -18,18 +18,14 @@ def main():
     while True:
         t.forward(1)
 
-
 def turn_left():
     t.left(90)
-
 
 def turn_right():
     t.right(90)
 
-
 def center():
     t.goto((0,0))
-
 
 if __name__ == '__main__':
     main()

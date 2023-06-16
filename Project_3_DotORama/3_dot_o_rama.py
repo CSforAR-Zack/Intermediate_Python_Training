@@ -28,4 +28,10 @@ def main():
 
     s.mainloop()
 
-main()
+if __name__ == '__main__':
+    main()
+
+# Standard: CSPG.Y2.2.1 Construct and evaluate compound expressions using multiple relational and logical operators
+# This program uses compound expressions to determine which color to use for each dot.
+# For example, if the x coordinate is less than -167 and the y coordinate is greater than 167, the dot will be hotpink.
+

@@ -5,7 +5,7 @@ from time import sleep
 
 
 def main():
-    # This are the variables you can change
+    # These are the variables you can change
     number_of_bars = 40
     low_value = 0
     high_value = 40
@@ -31,8 +31,7 @@ def main():
 
 class Boxes:
     '''
-    A class to represent and manage the bars.
-
+    A class to represent and manage the boxes.
     '''
 
     def __init__(self, wn, speed, values=None):
