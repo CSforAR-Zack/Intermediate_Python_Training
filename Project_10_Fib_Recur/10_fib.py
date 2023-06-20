@@ -1,7 +1,11 @@
 from turtle import Turtle, Screen
 
 def main():
+    s = Screen()
     t = Turtle()
+
+    s.bgcolor("black")
+
     colors = ["red", "orange", "yellow", "green", "blue", "darkblue", "purple"]
     t.speed(0)
     t.left(90)
@@ -15,7 +19,9 @@ def main():
             t.forward(num)
             t.right(90)
         t.left(90)
-        t.end_fill()
+        t.end_fill()    
+    
+    s.mainloop()
 
 
 def fib(num):
